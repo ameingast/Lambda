@@ -3,6 +3,10 @@
 
 #define lambda(ret, body) ({ ret __fn__ body __fn__; })
 
+#define apply(f, ...) (f(__VA_ARGS__))
+
+#define chain(f, g, ...) (f(g(__VA_ARGS__)))
+
 #define map(source, target, size, f) do {                             \
   for (int __i = 0; __i < size; __i++) target[__i] = f(source[__i]);  \
 } while (0)

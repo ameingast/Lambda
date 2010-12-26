@@ -6,6 +6,9 @@ TARGET 		= lambda
 SRC 			= main.c
 OBJ 			= ${SRC:.c=.o}
 
+test: $(TARGET)
+	./$(TARGET)
+
 $(TARGET): $(OBJ)
 	@${ECHO} "[LINK]\t$(TARGET)"
 	@${CC} ${CFLAGS} ${OBJ} -o $(TARGET) $(LFLAGS)
@@ -14,9 +17,6 @@ $(TARGET): $(OBJ)
 %.o: %.c
 	@${ECHO} "[GCC]\t$<"
 	@${CC} -c ${CFLAGS} -o $@ $<
-
-test:
-	./$(TARGET)
 
 clean:
 		@rm -f $(TARGET) $(OBJ)
