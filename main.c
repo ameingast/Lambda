@@ -78,6 +78,26 @@ static void test_forall(void)
   ASSERT_EQUAL(counter, 5);
 }
 
+static void test_exists(void)
+{
+  int xs[] = { 1, 2, 3 }, result = 0;
+  
+  exists(xs, 3, result, lambda(int, (int x) { return x == 2; }));
+  ASSERT_EQUAL(1, result);
+  exists(xs, 3, result, lambda(int, (int x) { return x < 0; }));
+  ASSERT_EQUAL(0, result);
+}
+
+static void test_all(void)
+{
+  int xs[] = { 2, 2, 2 }, result = 0;
+  
+  all(xs, 3, result, lambda(int, (int x) { return x == 2; }));
+  ASSERT_EQUAL(1, result);
+  all(xs, 3, result, lambda(int, (int x) { return x < 2; }));
+  ASSERT_EQUAL(0, result);
+}
+
 int main(int argc, char **argv)
 { 
   test_lambda();
@@ -88,5 +108,7 @@ int main(int argc, char **argv)
   test_select();
   test_foldr_int();
   test_forall();
+  test_exists();
+  test_all();
   return 0;
 }

@@ -5,7 +5,7 @@
 
 #define apply(f, ...) (f(__VA_ARGS__))
 
-#define chain(f, g, ...) (f(g(__VA_ARGS__)))
+#define chain(f, g, ...) (apply(f, apply(g, __VA_ARGS__)))
 
 #define map(source, target, size, f) do {                             \
   for (int __i = 0; __i < size; __i++) target[__i] = f(source[__i]);  \
@@ -26,6 +26,20 @@
 #define select(source, target, size, f) do {                          \
   for (int __i = 0, __j = 0; __i < size; __i++)                       \
     if (0 != f(source[__i])) target[__j++] = source[__i];             \
+} while (0)
+
+#define exists(source, size, b, f) do {                               \
+  b = 0;                                                              \
+  for (int __i = 0; __i < size; __i++) {                              \
+    if (0 != f(source[__i])) { b = 1; break; }                        \
+  }                                                                   \
+} while (0)
+
+#define all(source, size, b, f) do {                                  \
+  b = 1;                                                              \
+  for (int __i = 0; __i < size; __i++) {                              \
+    if (0 == f(source[__i])) { b = 0; break; }                        \
+  }                                                                   \
 } while (0)
 
 #endif
