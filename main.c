@@ -102,6 +102,34 @@ static void test_all(void)
   ASSERT_EQUAL(0, result);
 }
 
+static void test_nested_forall(void)
+{
+  int xs[] = { 1, 2, 3 }, ys[] = { 1, 2, 3 }, zs[] = { 1, 2, 3 }, counter = 0;
+  
+  forall(xs, 3, lambda(void, (int x) { 
+    forall(ys, 3, lambda(void, (int y) {
+      forall(zs, 3, lambda(void, (int z) {
+        counter++;
+      }));
+    }));
+  }));
+  ASSERT_EQUAL(27, counter);
+}
+
+static void test_nested_map(void)
+{
+  int xxs[3][3] = { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } }, ys[3] = { };
+  
+  map(xxs, ys, 3, lambda(int, (int xs[]) { 
+    int result = 0;
+    foldl(xs, result, 3, lambda(int, (int x, int y) { return x + y; }));
+    return result;
+  }));
+  ASSERT_EQUAL(6, ys[0]);
+  ASSERT_EQUAL(6, ys[1]);
+  ASSERT_EQUAL(6, ys[2]);
+}
+
 int main(int argc, char **argv)
 { 
   test_lambda();
@@ -114,5 +142,7 @@ int main(int argc, char **argv)
   test_forall();
   test_exists();
   test_all();
+  test_nested_forall();
+  test_nested_map();
   return 0;
 }
