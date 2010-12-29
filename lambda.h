@@ -30,16 +30,14 @@
 
 #define exists(source, size, b, f) do {                               \
   b = 0;                                                              \
-  for (int __i = 0; __i < size; __i++) {                              \
+  for (int __i = 0; __i < size; __i++)                                \
     if (0 != f(source[__i])) { b = 1; break; }                        \
-  }                                                                   \
 } while (0)
 
 #define all(source, size, b, f) do {                                  \
   b = 1;                                                              \
-  for (int __i = 0; __i < size; __i++) {                              \
+  for (int __i = 0; __i < size; __i++)                                \
     if (0 == f(source[__i])) { b = 0; break; }                        \
-  }                                                                   \
 } while (0)
 
 #endif

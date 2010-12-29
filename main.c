@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "lambda.h"
 
@@ -7,35 +6,40 @@
   if (x != y) printf("%s:%d: <" #x " != " #y ">\n", __FILE__, __LINE__);  \
 } while (0)
 
+#define MAX_LAMBDA (lambda(int, (int x, int y) { return x > y ? x : y; }))
+#define ADD_ONE_LAMBDA(type) (lambda(type, (type x) { return x + 1; }))
+
 static void test_lambda(void)
 {  
-  int (*max)(int, int) = lambda(int, (int x, int y) { return x > y ? x : y; });
+  int (*max)(int, int) = MAX_LAMBDA;
   
   ASSERT_EQUAL(2, max(1, 2));
-  ASSERT_EQUAL(3, max(3, 2));
+  ASSERT_EQUAL(3, MAX_LAMBDA(3, 2));
 }
 
 static void test_apply(void)
 {
-  int (*add_one)(int) = lambda(int, (int x) { return x + 1; });
+  int (*add_one)(int) = ADD_ONE_LAMBDA(int);
   
   ASSERT_EQUAL(2, apply(add_one, 1));
+  ASSERT_EQUAL(2, apply(ADD_ONE_LAMBDA(int), 1));
 }
 
 static void test_chain(void)
 {
-  int (*add_one)(int) = lambda(int, (int x) { return x + 1; });
+  int (*add_one)(int) = ADD_ONE_LAMBDA(int);
   
   ASSERT_EQUAL(3, chain(add_one, add_one, 1));
+  ASSERT_EQUAL(3, chain(add_one, ADD_ONE_LAMBDA(int), 1));
 }
 
 static void test_map(void)
 {
   int x[5] = { 1, 2, 3, 4, 5 }, y[5] = { 0 };
   int add_one_f(int x) { return x + 1; }
-  int (*add_one_l)(int) = lambda(int, (int x) { return x + 1; });
+  int (*add_one_l)(int) = ADD_ONE_LAMBDA(int);
   
-  map(x, y, 5, lambda(int, (int x) { return x + 1; }));
+  map(x, y, 5, ADD_ONE_LAMBDA(int));
   for (int i = 0; i < 5; i++) ASSERT_EQUAL(x[i] + 1, y[i]);
   
   map(x, y, 5, add_one_f);
