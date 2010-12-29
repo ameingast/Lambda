@@ -28,16 +28,18 @@
     if (0 != f(source[__i])) target[__j++] = source[__i];             \
 } while (0)
 
-#define exists(source, size, b, f) do {                               \
-  b = 0;                                                              \
-  for (int __i = 0; __i < size; __i++)                                \
-    if (0 != f(source[__i])) { b = 1; break; }                        \
-} while (0)
+#define exists(source, size, f) ({                                    \
+  int __fn__ (void) {                                                 \
+    for (int i = 0; i < size; i++) if (0 != f(source[i])) return 1;   \
+    return 0;                                                         \
+  } __fn__;                                                           \
+})()
 
-#define all(source, size, b, f) do {                                  \
-  b = 1;                                                              \
-  for (int __i = 0; __i < size; __i++)                                \
-    if (0 == f(source[__i])) { b = 0; break; }                        \
-} while (0)
+#define all(source, size, f) ({                                       \
+  int __fn__ (void) {                                                 \
+    for (int i = 0; i < size; i++) if (0 == f(source[i])) return 0;   \
+    return 1;                                                         \
+  } __fn__;                                                           \
+})()
 
 #endif

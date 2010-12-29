@@ -84,22 +84,18 @@ static void test_forall(void)
 
 static void test_exists(void)
 {
-  int xs[] = { 1, 2, 3 }, result = 0;
+  int xs[] = { 1, 2, 3 };
   
-  exists(xs, 3, result, lambda(int, (int x) { return x == 2; }));
-  ASSERT_EQUAL(1, result);
-  exists(xs, 3, result, lambda(int, (int x) { return x < 0; }));
-  ASSERT_EQUAL(0, result);
+  ASSERT_EQUAL(1, exists(xs, 3, lambda(int, (int x) { return x == 2; })));
+  ASSERT_EQUAL(0, exists(xs, 3, lambda(int, (int x) { return x < 0; })));
 }
 
 static void test_all(void)
 {
-  int xs[] = { 2, 2, 2 }, result = 0;
+  int xs[] = { 2, 2, 2 };
   
-  all(xs, 3, result, lambda(int, (int x) { return x == 2; }));
-  ASSERT_EQUAL(1, result);
-  all(xs, 3, result, lambda(int, (int x) { return x < 2; }));
-  ASSERT_EQUAL(0, result);
+  ASSERT_EQUAL(1, all(xs, 3, lambda(int, (int x) { return x == 2; })));
+  ASSERT_EQUAL(0, all(xs, 3, lambda(int, (int x) { return x < 2; })));
 }
 
 static void test_nested_forall(void)
@@ -130,6 +126,15 @@ static void test_nested_map(void)
   ASSERT_EQUAL(6, ys[2]);
 }
 
+static void test_nested_all(void)
+{
+  int xxs[3][3] = { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } };
+  
+  ASSERT_EQUAL(1, all(xxs, 3, lambda(int, (int xs[]) {
+    return all(xs, 3, lambda(int, (int x) { return x < 4; }));
+  })));
+}
+
 int main(int argc, char **argv)
 { 
   test_lambda();
@@ -144,5 +149,6 @@ int main(int argc, char **argv)
   test_all();
   test_nested_forall();
   test_nested_map();
+  test_nested_all();
   return 0;
 }
