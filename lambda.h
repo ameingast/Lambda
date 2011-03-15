@@ -23,20 +23,15 @@
 #ifndef _LAMBDA_H_
 #define _LAMBDA_H_
 
-/**
- * Generates an anonymous function with return type 'ret' and function body 
- * 'body'.
- */
+#include <stdio.h>
+#include <time.h>
+
 #define lambda(ret, body) ({ ret __fn__ body __fn__; })
 
 #define apply(f, ...) (f(__VA_ARGS__))
 
 #define chain(f, g, ...) (apply(f, apply(g, __VA_ARGS__)))
 
-/**
- * Maps all elements in the array source to the array target by applying 
- * f to its elements.
- */
 #define map(source, target, size, f) do {                             \
   for (int __i = 0; __i < size; __i++) target[__i] = f(source[__i]);  \
 } while (0)
@@ -69,6 +64,14 @@
   int __fn__ (void) {                                                 \
     for (int i = 0; i < size; i++) if (0 == f(source[i])) return 0;   \
     return 1;                                                         \
+  } __fn__;                                                           \
+})()
+
+#define bm(l) ({                                                      \
+  clock_t __fn__ (void) {                                             \
+    clock_t t = clock();                                              \
+    l();                                                              \
+    return clock() - t;                                               \
   } __fn__;                                                           \
 })()
 

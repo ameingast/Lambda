@@ -34,7 +34,7 @@ static void bm_vector_addition(void)
     v[i][0] = i; v[i][1] = i + 1; v[i][2] = i + 2;
   }
   
-  t= BM(lambda(void, (void) {
+  t = bm(lambda(void, (void) {
     forall(v, 32768, lambda(void, (long k[]) {
       r[0] += k[0]; r[1] += k[1]; r[2] += k[2];
     }));
@@ -43,7 +43,7 @@ static void bm_vector_addition(void)
   
   r[0] = r[1] = r[2] = 0;
   
-  t = BM(lambda(void, (void) {
+  t = bm(lambda(void, (void) {
     for (int i = 0; i < 32768; i++) {
       r[0] += v[i][0]; r[1] += v[i][1]; r[2] += v[i][2];
     }
@@ -67,15 +67,15 @@ static void bm_primes(void)
   
   for (int i = 0; i < 32768; i++) v[i] = i;
   
-  t = BM(lambda(void, (void) { select(v, r1, 32768, is_prime); }));
+  t = bm(lambda(void, (void) { select(v, r1, 32768, is_prime); }));
   printf("select(is_prime): %d\n", (int)t);
   
-  t = BM(lambda(void, (void) {
+  t = bm(lambda(void, (void) {
     select(v, r2, 32768, lambda(int, (long k) { return is_prime(k); }));
   }));
   printf("select(lambda(is_prime)): %d\n", (int)t);
   
-  t = BM(lambda(void, (void) {
+  t = bm(lambda(void, (void) {
     for (int i = 0; i < 32768; i++) r3[i] = is_prime(v[i]);
   }));
   printf("for(is_prime): %d\n", (int)t);

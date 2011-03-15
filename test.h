@@ -23,12 +23,6 @@
 #ifndef _TEST_H_
 #define _TEST_H_
 
-#define ASSERT(c) do {                                                      \
-  if (!(c)) printf("%s:%d: Assertion failed: "#c">\n", __FILE__, __LINE__); \
-} while (0)
-#define ASSERT_EQUAL(x, y) ASSERT(x == y)
-#define ASSERT_NOT_EQUAL(x, y) ASSERT(x != y)
-
 void test_suite(void);
 
 #endif 

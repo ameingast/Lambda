@@ -23,18 +23,7 @@
 #ifndef _BM_H_
 #define _BM_H_
 
-#include <stdio.h>
-#include <time.h>
-
 #include "lambda.h"
-
-#define BM(f) ({                                                      \
-  clock_t __fn__ (void) {                                             \
-    clock_t t = clock();                                              \
-    f();                                                              \
-    return clock() - t;                                               \
-  } __fn__;                                                           \
-})()
 
 void bm_suite(void);
 

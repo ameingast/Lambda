@@ -26,8 +26,16 @@
 #include "test.h"
 #include "lambda.h"
 
+#define ASSERT(c) do {                                                      \
+  if (!(c)) printf("%s:%d: Assertion failed: "#c">\n", __FILE__, __LINE__); \
+} while (0)
+
+#define ASSERT_EQUAL(x, y) ASSERT(x == y)
+
+#define ASSERT_NOT_EQUAL(x, y) ASSERT(x != y)
 
 #define MAX_LAMBDA (lambda(int, (int x, int y) { return x > y ? x : y; }))
+
 #define ADD_ONE_LAMBDA(type) (lambda(type, (type x) { return x + 1; }))
 
 static void test_lambda(void)
