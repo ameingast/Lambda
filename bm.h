@@ -28,11 +28,13 @@
 
 #include "lambda.h"
 
-#define BM(stream, desc, block) do {                                  \
-  clock_t t = clock();                                                \
-  block                                                               \
-  fprintf(stream, "%s: %d us\n", desc, (int)(clock() - t));           \
-} while (0)
+#define BM(f) ({                                                      \
+  clock_t __fn__ (void) {                                             \
+    clock_t t = clock();                                              \
+    f();                                                              \
+    return clock() - t;                                               \
+  } __fn__;                                                           \
+})()
 
 void bm_suite(void);
 

@@ -22,7 +22,7 @@
 
 CC 				= gcc
 ECHO			= echo
-CFLAGS 		= -std=c99 -fnested-functions -Wall 
+CFLAGS 		= -std=c99 -fnested-functions -Wall
 LFLAGS  	= -ll
 TARGET 		= lambda
 SRC 			= main.c test.c bm.c
