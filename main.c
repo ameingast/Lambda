@@ -1,10 +1,36 @@
-#include <stdio.h>
+/**
+ * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ **/
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "bm.h"
 #include "lambda.h"
 
-#define ASSERT_EQUAL(x, y) do {                                           \
-  if (x != y) printf("%s:%d: <" #x " != " #y ">\n", __FILE__, __LINE__);  \
+#define ASSERT(c) do {                                                      \
+  if (!(c)) printf("%s:%d: Assertion failed: "#c">\n", __FILE__, __LINE__); \
 } while (0)
+#define ASSERT_EQUAL(x, y) ASSERT(x == y)
+#define ASSERT_NOT_EQUAL(x, y) ASSERT(x != y)
 
 #define MAX_LAMBDA (lambda(int, (int x, int y) { return x > y ? x : y; }))
 #define ADD_ONE_LAMBDA(type) (lambda(type, (type x) { return x + 1; }))
@@ -37,7 +63,7 @@ static void test_map(void)
 {
   int x[5] = { 1, 2, 3, 4, 5 }, y[5] = { 0 };
   int add_one_f(int x) { return x + 1; }
-  int (*add_one_l)(int) = ADD_ONE_LAMBDA(int);
+  int (*add_one_p)(int) = ADD_ONE_LAMBDA(int);
   
   map(x, y, 5, ADD_ONE_LAMBDA(int));
   for (int i = 0; i < 5; i++) ASSERT_EQUAL(x[i] + 1, y[i]);
@@ -45,7 +71,7 @@ static void test_map(void)
   map(x, y, 5, add_one_f);
   for (int i = 0; i < 5; i++) ASSERT_EQUAL(x[i] + 1, y[i]);
   
-  map(x, y, 5, add_one_l);
+  map(x, y, 5, add_one_p);
   for (int i = 0; i < 5; i++) ASSERT_EQUAL(x[i] + 1, y[i]);
 }
 
@@ -135,6 +161,11 @@ static void test_nested_all(void)
   })));
 }
 
+static void test_bm(void)
+{
+  ASSERT(0 != BM(lambda(void, (void) { for (int i = 0; i < 10000; i++) {} })));
+}
+
 int main(int argc, char **argv)
 { 
   test_lambda();
@@ -150,5 +181,6 @@ int main(int argc, char **argv)
   test_nested_forall();
   test_nested_map();
   test_nested_all();
+  test_bm();
   return 0;
 }
