@@ -20,14 +20,15 @@
  * THE SOFTWARE.
  **/
 
-#include <stdlib.h>
+#ifndef _TEST_H_
+#define _TEST_H_
 
-#include "bm.h"
-#include "test.h"
+#define ASSERT(c) do {                                                      \
+  if (!(c)) printf("%s:%d: Assertion failed: "#c">\n", __FILE__, __LINE__); \
+} while (0)
+#define ASSERT_EQUAL(x, y) ASSERT(x == y)
+#define ASSERT_NOT_EQUAL(x, y) ASSERT(x != y)
 
-int main(int argc, char **argv)
-{ 
-  test_suite();
-  bm_suite();
-  return 0;
-}
+void test_suite(void);
+
+#endif 

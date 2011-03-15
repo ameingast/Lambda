@@ -23,14 +23,17 @@
 #ifndef _BM_H_
 #define _BM_H_
 
+#include <stdio.h>
 #include <time.h>
 
 #include "lambda.h"
 
-#define BM(f) ({                                                      \
-  long __fn__ (void) {                                                \
-    clock_t t = clock(); f(); return clock() - t;                     \
-  } __fn__;                                                           \
-})()
+#define BM(stream, desc, block) do {                                  \
+  clock_t t = clock();                                                \
+  block                                                               \
+  fprintf(stream, "%s: %d us\n", desc, (int)(clock() - t));           \
+} while (0)
+
+void bm_suite(void);
 
 #endif
