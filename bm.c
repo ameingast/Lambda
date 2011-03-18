@@ -26,8 +26,9 @@
 
 #include "bm.h"
 
-#define BM_SIZE 32768
-#define BM_ITS  16
+#define BM_SIZE       32768
+#define BM_SMALL_SIZE 32
+#define BM_ITS        16
 
 static void bm_vector_addition(void)
 {
@@ -78,6 +79,11 @@ static inline int is_prime(long p)
   return 1;
 }
 
+static inline long fib(long k)
+{
+  return (k < 2) ? 1 : fib(k - 1) + fib(k - 2);
+}
+
 static void bm_primes(void)
 {
   long v[BM_SIZE] = { 0 }, r1[BM_SIZE] = { 0 }, r2[BM_SIZE] = { 0 };
@@ -94,9 +100,38 @@ static void bm_primes(void)
   printf("prime:\tselect: %.3f | for: %.3f :: speedup: %.3f\n", t1, t2, t1/t2);
 }
 
+static void bm_fib_memo(void)
+{
+  long v[BM_SMALL_SIZE] = { 0 }, r1[BM_SMALL_SIZE] = { 0 }, r2[BM_SMALL_SIZE] = { 0 };
+  float t1, t2;
+  
+  for (int i = 0; i < BM_SMALL_SIZE; i++) v[i] = i;
+    
+  long (*fib_memo)(long) = lambda(long, (long p) {
+    static long fib_cache[BM_SMALL_SIZE] = { -1 };
+    
+    if (p < 2) 
+      return 1;
+    if (fib_cache[p] != -1)
+      return fib_cache[p];
+    else
+      return fib_cache[p] = fib_memo(p - 1) + fib_memo(p - 2);
+  });
+  
+  t1 = bm(BM_ITS, lambda(void, (void) { map(v, r1, BM_SMALL_SIZE, fib_memo); }));
+  
+  t2 = bm(BM_ITS, lambda(void, (void) {
+    for (int i = 0; i < BM_SMALL_SIZE; i++)
+      r2[i] = fib(v[i]);
+  }));
+  
+  printf("fib:\tmap: %.3f | for: %.3f :: speedup: %.3f\n", t1, t2, t1/t2);
+}
+
 void bm_suite(void)
 {
   bm_arith();
   bm_vector_addition();
   bm_primes();
+  bm_fib_memo();
 }
