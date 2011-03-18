@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,8 @@
  * THE SOFTWARE.
  **/
 
-#ifndef _LAMBDA_H_
-#define _LAMBDA_H_
-
-#include <stdio.h>
-#include <time.h>
+#ifndef _LAMBDA_LAMBDA_H_
+#define _LAMBDA_LAMBDA_H_
 
 #define lambda(ret, body) ({ ret __fn__ body __fn__; })
 
@@ -64,14 +61,6 @@
   int __fn__ (void) {                                                 \
     for (int i = 0; i < size; i++) if (0 == f(source[i])) return 0;   \
     return 1;                                                         \
-  } __fn__;                                                           \
-})()
-
-#define bm(l) ({                                                      \
-  clock_t __fn__ (void) {                                             \
-    clock_t t = clock();                                              \
-    l();                                                              \
-    return clock() - t;                                               \
   } __fn__;                                                           \
 })()
 

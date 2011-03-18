@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  **/
 
-#ifndef _TEST_H_
-#define _TEST_H_
+#ifndef _LAMBDA_TEST_H_
+#define _LAMBDA_TEST_H_
 
 void test_suite(void);
 

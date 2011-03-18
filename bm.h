@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +20,24 @@
  * THE SOFTWARE.
  **/
 
-#ifndef _BM_H_
-#define _BM_H_
+#ifndef _LAMBDA_BM_H_
+#define _LAMBDA_BM_H_
+
+#include <time.h>
 
 #include "lambda.h"
+
+#define bm(its, l) ({                                                 \
+  int __fn__ (void) {                                                 \
+    long __result = 0;                                                \
+    for (int __i = 0; __i < its; __i++) {                             \
+      clock_t t = clock();                                            \
+      l();                                                            \
+      __result += clock() - t;                                        \
+    }                                                                 \
+    return __result / its;                                            \
+  } __fn__;                                                           \
+})()
 
 void bm_suite(void);
 

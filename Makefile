@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+# Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +28,13 @@ TARGET 		= lambda
 SRC 			= main.c test.c bm.c
 OBJ 			= ${SRC:.c=.o}
 
+bm: test
+	@${ECHO} "[BM]\t$(TARGET)"
+	@./$(TARGET) -b
+
 test: $(TARGET)
 	@${ECHO} "[TEST]\t$(TARGET)"
-	@./$(TARGET)
+	@./$(TARGET) -t
 
 $(TARGET): $(OBJ)
 	@${ECHO} "[LINK]\t$(TARGET)"

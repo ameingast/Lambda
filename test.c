@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,52 +23,48 @@
 #include <stdio.h>
 
 #include "bm.h"
-#include "test.h"
 #include "lambda.h"
+#include "test.h"
 
 #define ASSERT(c) do {                                                      \
-  if (!(c)) printf("%s:%d: Assertion failed: "#c">\n", __FILE__, __LINE__); \
+  if (!(c)) printf("%s:%d: Assertion failed: <"#c">\n", __FILE__, __LINE__); \
 } while (0)
 
 #define ASSERT_EQUAL(x, y) ASSERT(x == y)
 
 #define ASSERT_NOT_EQUAL(x, y) ASSERT(x != y)
 
-#define MAX_LAMBDA (lambda(int, (int x, int y) { return x > y ? x : y; }))
-
-#define ADD_ONE_LAMBDA(type) (lambda(type, (type x) { return x + 1; }))
-
 static void test_lambda(void)
 {  
-  int (*max)(int, int) = MAX_LAMBDA;
+  int (*max)(int, int) = lambda(int, (int x, int y) { return x > y ? x : y; });
   
   ASSERT_EQUAL(2, max(1, 2));
-  ASSERT_EQUAL(3, MAX_LAMBDA(3, 2));
+  ASSERT_EQUAL(3, lambda(int, (int x, int y) { return x > y ? x : y; })(2, 3));
 }
 
 static void test_apply(void)
 {
-  int (*add_one)(int) = ADD_ONE_LAMBDA(int);
+  int (*add_one)(int) = lambda(int, (int x) { return x + 1; });
   
   ASSERT_EQUAL(2, apply(add_one, 1));
-  ASSERT_EQUAL(2, apply(ADD_ONE_LAMBDA(int), 1));
+  ASSERT_EQUAL(2, apply(lambda(int, (int x) { return x + 1; }), 1));
 }
 
 static void test_chain(void)
 {
-  int (*add_one)(int) = ADD_ONE_LAMBDA(int);
+  int (*add_one)(int) = lambda(int, (int x) { return x + 1; });
   
   ASSERT_EQUAL(3, chain(add_one, add_one, 1));
-  ASSERT_EQUAL(3, chain(add_one, ADD_ONE_LAMBDA(int), 1));
+  ASSERT_EQUAL(3, chain(add_one, lambda(int, (int x) { return x + 1; }), 1));
 }
 
 static void test_map(void)
 {
   int x[5] = { 1, 2, 3, 4, 5 }, y[5] = { 0 };
   int add_one_f(int x) { return x + 1; }
-  int (*add_one_p)(int) = ADD_ONE_LAMBDA(int);
+  int (*add_one_p)(int) = lambda(int, (int x) { return x + 1; });
   
-  map(x, y, 5, ADD_ONE_LAMBDA(int));
+  map(x, y, 5, lambda(int, (int x) { return x + 1; }));
   for (int i = 0; i < 5; i++) ASSERT_EQUAL(x[i] + 1, y[i]);
   
   map(x, y, 5, add_one_f);
@@ -164,6 +160,14 @@ static void test_nested_all(void)
   })));
 }
 
+static void test_bm(void)
+{
+  int i = 0;
+  
+  ASSERT_NOT_EQUAL(0, bm(10, lambda(void, (void) { i++; })));
+  ASSERT_EQUAL(i, 10);
+}
+
 void test_suite(void)
 {
   test_lambda();
@@ -179,4 +183,5 @@ void test_suite(void)
   test_nested_forall();
   test_nested_map();
   test_nested_all();
+  test_bm();
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 Andreas Meingast, <ameingast@gmail.com>
+ * Copyright (c) 2010-2011 Andreas Meingast, <ameingast@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,27 @@
  **/
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "bm.h"
 #include "test.h"
 
 int main(int argc, char **argv)
 {
-  test_suite();
-  bm_suite();
-  return 0;
+  if (argc < 2)
+    goto error;
+  
+  if (0 == strcmp(argv[1], "-b")) 
+    bm_suite();
+  else if (0 == strcmp(argv[1], "-t")) 
+    test_suite();
+  else 
+    goto error;
+
+  return EXIT_SUCCESS;
+
+error:
+  fprintf(stdout, "Usage: %s [-tb]\n", argv[0]);
+  return EXIT_FAILURE;
 }
