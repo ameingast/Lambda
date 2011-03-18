@@ -26,6 +26,7 @@
 
 #include "bm.h"
 #include "test.h"
+#include "use.h"
 
 int main(int argc, char **argv)
 {
@@ -36,6 +37,8 @@ int main(int argc, char **argv)
     bm_suite();
   else if (0 == strcmp(argv[1], "-t")) 
     test_suite();
+  else if (0 == strcmp(argv[1], "-u"))
+    use_suite();
   else 
     goto error;
 

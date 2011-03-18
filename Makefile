@@ -25,7 +25,7 @@ ECHO			= echo
 CFLAGS 		= -std=c99 -fnested-functions -Wall
 LFLAGS  	= -ll
 TARGET 		= lambda
-SRC 			= main.c test.c bm.c
+SRC 			= main.c test.c bm.c use.c
 OBJ 			= ${SRC:.c=.o}
 
 bm: test

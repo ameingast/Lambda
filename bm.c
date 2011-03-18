@@ -74,7 +74,7 @@ static void bm_arith(void)
 
 static inline int is_prime(long p)
 { 
-  if (p < 4) return 0;
+  if (p < 4) return 1;
   else for (int i = 2; i < sqrt(p); i++) if (p % i == 0) return 0;
   return 1;
 }
