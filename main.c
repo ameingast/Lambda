@@ -45,6 +45,6 @@ int main(int argc, char **argv)
   return EXIT_SUCCESS;
 
 error:
-  fprintf(stdout, "Usage: %s [-tb]\n", argv[0]);
+  fprintf(stdout, "Usage: %s [-tbu]\n", argv[0]);
   return EXIT_FAILURE;
 }

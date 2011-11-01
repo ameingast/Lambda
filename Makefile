@@ -20,21 +20,21 @@
 # THE SOFTWARE.
 #
 
-CC 				= gcc
-ECHO			= echo
+CC 		= gcc
+ECHO		= echo
 CFLAGS 		= -std=c99 -fnested-functions -Wall
 LFLAGS  	= -ll
 TARGET 		= lambda
-SRC 			= main.c test.c bm.c use.c
-OBJ 			= ${SRC:.c=.o}
-
-bm: test
-	@${ECHO} "[BM]\t$(TARGET)"
-	@./$(TARGET) -b
+SRC 		= main.c test.c bm.c use.c bdd.c
+OBJ 		= ${SRC:.c=.o}
 
 test: $(TARGET)
 	@${ECHO} "[TEST]\t$(TARGET)"
 	@./$(TARGET) -t
+
+bm: test
+	@${ECHO} "[BM]\t$(TARGET)"
+	@./$(TARGET) -b
 
 $(TARGET): $(OBJ)
 	@${ECHO} "[LINK]\t$(TARGET)"

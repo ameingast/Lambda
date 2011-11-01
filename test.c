@@ -23,10 +23,11 @@
 #include <stdio.h>
 
 #include "bm.h"
+#include "bdd.h"
 #include "lambda.h"
 #include "test.h"
 
-#define ASSERT(c) do {                                                      \
+#define ASSERT(c) do {                                                       \
   if (!(c)) printf("%s:%d: Assertion failed: <"#c">\n", __FILE__, __LINE__); \
 } while (0)
 
@@ -168,6 +169,24 @@ static void test_bm(void)
   ASSERT_EQUAL(i, 10);
 }
 
+static void test_bdd(void)
+{
+  describe("something", lambda(void, (void) { 
+    before_each(lambda(void, (void) {}));
+
+    it("should print 'something'", lambda(void, (void) {
+      printf("'something'");
+    }));
+    
+    /* XXX: introduce a polymorphic #it 
+    it("should result in 3", lambda(int, (void) {
+      return 2 + 1;
+    }));*/
+  }));
+
+  run_specs();
+}
+
 void test_suite(void)
 {
   test_lambda();
@@ -184,4 +203,5 @@ void test_suite(void)
   test_nested_map();
   test_nested_all();
   test_bm();
+  test_bdd();
 }
