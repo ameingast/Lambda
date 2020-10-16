@@ -1,7 +1,7 @@
 LAMBDA
 ======
 
-The lambda library provides functional programming via lambda expressions
+This lambda library provides functional programming via lambda expressions
 for the C programming language. 
 
 Usage
